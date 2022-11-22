@@ -1,5 +1,5 @@
 ﻿/*
-    real time subtitle translate for PotPlayer using Bai Du API
+    real time subtitle translate for PotPlayer using aws API
 */
 
 // string GetTitle()                                                         -> get title for UI
@@ -14,11 +14,6 @@
 // string Translate(string Text, string &in SrcLang, string &in DstLang)     -> do translate !!
 
 
-//必须配置的部分，不过现在已经移交到“实时字幕翻译”中了
-//它的位置是： 打开任意视频或者点击左上角的PolPlayer -> 字幕 -> 实时字幕翻译 -> 实时字幕翻译设置 -> 选中百度翻译 -> 点右边的 “账户设置”
-string appId = "";//appid
-string toKen = "";//密钥
-
 //可选配置，一般而言是不用修改的！
 int coolTime = 1300;//冷却时间，这里的单位是毫秒，1秒钟=1000毫秒，如果提示 error:54003, 那么就加大这个数字，建议一次加100
 string userAgent = "Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36";//这个是可选配置，一般不用修改！
@@ -27,7 +22,6 @@ string userAgent = "Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like
 int NULL = 0;
 int executeThreadId = NULL;//这个变量的命名是我的目标，不过，暂时没能实现!只是做了个还有小bug的临时替代方案
 int nextExecuteTime = 0;//下次执行代码的时间
-
 
 /**
 * 获取当前插件的版本号
@@ -48,21 +42,21 @@ string GetTitle(){
 * 获取当前插件的表述信息
 */
 string GetDesc(){
-    return "https://fanyi.baidu.com/";
+    return "https://aws.amazon.com/cn/transcribe/";
 }
 
 /**
 * 获取登录的标题
 */
 string GetLoginTitle(){
-    return "aws";
+    return "aws翻译插件";
 }
 
 /**
 * 获取登录的描述信息
 */
 string GetLoginDesc(){
-    return "miuyap";
+    return "请输入你的ak/sk,注意最小权限原则";
 }
 
 
@@ -70,14 +64,14 @@ string GetLoginDesc(){
 * 获取登录时，用户输入框的标签名称
 */
 string GetUserText(){
-    return "App1";
+    return "ak:";
 }
 
 /**
 * 获取登录时，密码输入框的标签名称
 */
 string GetPasswordText(){
-    return "app2:";
+    return "sk:";
 }
 
 
@@ -101,19 +95,19 @@ array<string> GetDstLangs(){
 /**
 * 登录账号入口
 *
-*  这里不做校验了，只要有输入就判定为成功。具体测试由用户的翻译测试按钮去测试
-* @param appIdStr appid 字符串
-* @param toKenStr 秘钥字符串
+// *  这里不做校验了，只要有输入就判定为成功。具体测试由用户的翻译测试按钮去测试
+// * @param appIdStr appid 字符串
+// * @param toKenStr 秘钥字符串
 */
-string ServerLogin(string appIdStr, string toKenStr){
-    //空字符串校验
-    if(appIdStr.empty() || toKenStr.empty()) return "fail";
+// string ServerLogin(string appIdStr, string toKenStr){
+//     //空字符串校验
+//     if(appIdStr.empty() || toKenStr.empty()) return "fail";
 
-    //记录到全局变量中
-    appId = appIdStr;
-    toKen = toKenStr;
-    return "200 ok";
-}
+//     //记录到全局变量中
+//     appId = appIdStr;
+//     toKen = toKenStr;
+//     return "200 ok";
+// }
 
 
 /**
@@ -126,26 +120,22 @@ string Translate(string text, string &in srcLang, string &in dstLang){
     string ret = "";
     if(!text.empty()){//确实有内容需要翻译才有必要继续
         //开发文档。需要App id 等信息
-        //http://api.fanyi.baidu.com/api/trans/product/apidoc
         //HostOpenConsole();    // for debug
         
         //语言选择
         srcLang = GetLang(srcLang);
         dstLang = GetLang(dstLang);
-        // deffes
+
         //对原文进行 url 编码
-        string q = HostUrlEncode(text);
+        string msg = HostUrlEncode(text);
         //HostPrintUTF8(q);
         //构建请求的 url 地址
-        //string salt = "" + HostGetTickCount();//随机数
-        //string sign = HostHashMD5(appId + text + salt + toKen);//签名 appid+q+salt+密钥
-        //string parames = "from=" + srcLang + "&to=" + dstLang + "&appid=" + appId + "&sign=" + sign  + "&salt=" + salt + "&q=" + q;
-        string url = "http://192.168.31.182:8888/translate?q="+q;
+        string url = "http://192.168.31.182:8888/translate?q="+msg;
 
         //线程同步 - 独占锁
         acquireExclusiveLock();
 
-        //计算冷却时间，应百度翻译新版API要求，加入频率设定
+        //计算冷却时间，应新版API要求，加入频率设定
         int tickCount = HostGetTickCount();
         int sleepTime = nextExecuteTime - tickCount;
 
@@ -166,21 +156,8 @@ string Translate(string text, string &in srcLang, string &in dstLang){
         releaseExclusiveLock();
 
         //解析翻译结果
-        //if(!html.empty()){//如果成功取得 Html 内容
-          //  ret = JsonParse(html);//那么解析这个 HTML 里面的 json 内容
-        //}
-            ret = JsonParse(html);
-        //翻译结果特殊处理
-        //if(text == ret){//如果翻译后的译文，跟原文一致
-           // if(srcLang == "zh" && dstLang == "cht"){// 简体 转 繁体
-                //不进行任何处理
-            //}else if(srcLang == "cht" && dstLang == "zh"){// 繁体 转 简体
-            //    //不进行任何处理
-            //}else{
-             //   ret = " ";//那么忽略这个字幕
-            //}
-       // }
-        // ret = "test a  zimu";
+        ret = JsonParse(html);
+
         if(ret.length() > 0){//如果有翻译结果
             srcLang = "UTF8";
             dstLang = "UTF8";

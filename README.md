@@ -1,0 +1,2 @@
+# potplayer_translate_plug_in
+基于aws翻译的potplayer实时字幕

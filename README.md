@@ -1,7 +1,9 @@
 # potplayer_translate_plug_in
 
+
 ## 基于aws翻译的potplayer实时字幕
 
+具体部署步骤可以见[部署文档](docs/deploy.md)
 
 记得一开始potplayer是有实时字幕功能的，
 

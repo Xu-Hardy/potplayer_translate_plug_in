@@ -12,7 +12,7 @@ http://www.angelcode.com/angelscript/documentation.html
 看到了有人制作了关于百度api翻译实时字幕的教程，然后去github翻了下作者的源代码，以此为灵感，写了一个基于aws的翻译插件，并且用flask 实现一个api的封装，api内部调用了aws的翻译服务。
 
 
-C:\Program Files\DAUM\PotPlayer\Extension\Subtitle\Translate
+
 
 ![img.png](../images/img.png)
 

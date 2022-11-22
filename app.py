@@ -8,8 +8,8 @@ load_dotenv()
 app = Flask(__name__)
 
 # read ak/sk from env
-print(os.environ.get('ak'))
-print(os.environ.get('sk'))
+ak, sk = os.environ.get('ak'), os.environ.get('sk')
+region = os.environ.get('region', 'us-east-1')
 
 
 @app.route('/translate', methods=['post', 'get'])
@@ -21,8 +21,7 @@ def translate():
     try:
         data = request.args
         # get aws ak and sk
-        ak, sk = os.environ.get('ak'), os.environ.get('sk')
-        region = os.environ.get('region', 'us-east-1')
+
         # and source_language and destination_language, for default, source_language = 'en', destination_language = 'zh'
         source_language, destination_language = data.get('src', 'en'), data.get('dst', 'zh')
         message = data.get('msg', 'this a test message')
@@ -34,7 +33,7 @@ def translate():
             SourceLanguageCode=source_language,
             TargetLanguageCode=destination_language,
         )
-        print(response)
+        # print(response)
 
     except Exception as e:
         print(e)
@@ -51,4 +50,4 @@ def translate():
     }
 
 
-app.run(port=8888, host='0.0.0.0', debug=True)
+app.run(port=8888, host='0.0.0.0', debug=False)

@@ -130,7 +130,7 @@ string Translate(string text, string &in srcLang, string &in dstLang){
         string msg = HostUrlEncode(text);
         //HostPrintUTF8(q);
         //构建请求的 url 地址
-        string url = "http://192.168.31.182:8888/translate?q="+msg;
+        string url = "http://192.168.31.182:8888/translate?msg="+msg;
 
         //线程同步 - 独占锁
         acquireExclusiveLock();

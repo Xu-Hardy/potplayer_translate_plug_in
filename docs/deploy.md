@@ -10,7 +10,10 @@ http://localhost:8888/translate?msg=dog
 python app.py
 ```
 4. 如需使用容器部署, 目录下也提供了对应的dockerfile
-
+```bash
+docker build -t awstranslate .
+docker run -p 8888:8888 awstranslate
+```
 ## 工程结构
 
 ```text

@@ -9,19 +9,11 @@
 // string GetLoginDesc()                                                    -> get desc for login dialog
 // string ServerLogin(string User, string Pass)                                -> login
 // string ServerLogout()                                                    -> logout
-// array<string> GetSrcLangs()                                                 -> get source language
 // array<string> GetDstLangs()                                                 -> get target language
 // string Translate(string Text, string &in SrcLang, string &in DstLang)     -> do translate !!
 
 
-//可选配置，一般而言是不用修改的！
-int coolTime = 1300;//冷却时间，这里的单位是毫秒，1秒钟=1000毫秒，如果提示 error:54003, 那么就加大这个数字，建议一次加100
 string userAgent = "Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36";//这个是可选配置，一般不用修改！
-
-//执行环境，请不要修改！
-int NULL = 0;
-int executeThreadId = NULL;//这个变量的命名是我的目标，不过，暂时没能实现!只是做了个还有小bug的临时替代方案
-int nextExecuteTime = 0;//下次执行代码的时间
 
 /**
 * 获取当前插件的版本号
@@ -120,7 +112,7 @@ string Translate(string text, string &in srcLang, string &in dstLang){
     string ret = "";
     if(!text.empty()){//确实有内容需要翻译才有必要继续
         //开发文档。需要App id 等信息
-        //HostOpenConsole();    // for debug
+        HostOpenConsole();    // for debug
         
         //语言选择
         srcLang = GetLang(srcLang);
@@ -132,31 +124,13 @@ string Translate(string text, string &in srcLang, string &in dstLang){
         //构建请求的 url 地址
         string url = "http://192.168.31.182:8888/translate?msg="+msg;
 
-        //线程同步 - 独占锁
-        acquireExclusiveLock();
-
-        //计算冷却时间，应新版API要求，加入频率设定
-        int tickCount = HostGetTickCount();
-        int sleepTime = nextExecuteTime - tickCount;
-
-        //冷却处理
-        if(sleepTime > 0){//如果冷却时间还没到，有需要休息的部分
-            HostSleep(sleepTime);//那么就休息这些时间
-        }
-
         //请求翻译
         string html = HostUrlGetString(url, userAgent);
         //HostPrintUTF8("Hello World!");
 
-
-        //更新下次执行任务的时间
-        nextExecuteTime = coolTime + HostGetTickCount();//上面 HostUrlGetString 需要时间执行，所以需要重新获取 TickCount
-
-        //线程同步 - 释放独占锁
-        releaseExclusiveLock();
-
         //解析翻译结果
         ret = JsonParse(html);
+        HostPrintUTF8(ret);
 
         if(ret.length() > 0){//如果有翻译结果
             srcLang = "UTF8";
@@ -277,44 +251,4 @@ bool hasErrorInResult(array<string> keys){
         }
     }
     return result;
-}
-
-/**
-上独占锁 - 当前仅仅只是模拟版，还有 bug ,不过暂时可临时使用
-*/
-void acquireExclusiveLock(){
-    int tickCount1 = HostGetTickCount();//取得第一个时刻
-    HostSleep(1);
-    int tickCount2 = HostGetTickCount();//取得第二个时刻
-    /**
-    注意：
-    1、这是一个临时的方案
-    2、因为我本地尝试：HostLoadLibrary("Kernel32.dll") 没能正常工作，所以才采用当前这个临时方案
-    3、key 原本应该是唯一的，不然可能存在多个线程得到的是同一个tickCount。会导致多个线程同时执行，意味着这多个线程只能成功一个翻译，虽然已经做了部分防御，但是不能确保万一！
-    4、当然，上方的触发的概率不高，不过确实存在这个bug。
-    5、所以当前只能作为临时方案，有更好的方案时，必须替换掉
-    */
-    int key = tickCount1 << 16 + (tickCount2 & 0xFFFF);//两个时刻合并，使得多线程重复相同数字的概率下降，但还是有可能重复，当前这个算法，仅仅能作为临时的解决方案而已！
-
-    while(executeThreadId != key){
-        if(executeThreadId == NULL){//如果没其他任务在执行了
-            executeThreadId = key;//尝试注册当前任务为执行任务
-        }
-
-        HostSleep(1);//休息下，看看有没有抢着注册的其他线程任务，或者等待正在执行的任务解除锁
-
-        if(executeThreadId == key){//如果没被其他线程抢注册了
-            HostSleep(1);//再次休息下
-            if(executeThreadId == key){//二次确认，确保原子性
-                break;//成功抢到执行权限，不必再等待了
-            }
-        }
-    }
-}
-
-/**
-释放独占锁 - 当前仅仅只是模拟版，还有 bug ,不过暂时可临时使用
-*/
-void releaseExclusiveLock(){
-    executeThreadId = NULL;//解除锁
 }

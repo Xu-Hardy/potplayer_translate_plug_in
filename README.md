@@ -21,3 +21,10 @@
 ## 语言支持
 
 2022/11/22 支持英文翻译成中文
+
+
+最后：
+
+欢迎大家提pull request。
+
+https://github.com/mengze-han/potplayer_translate_plug_in

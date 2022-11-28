@@ -12,6 +12,14 @@ ak, sk = os.environ.get('ak'), os.environ.get('sk')
 region = os.environ.get('region', 'us-east-1')
 client = boto3.client('translate', region_name=region, aws_access_key_id=ak, aws_secret_access_key=sk)
 
+
+@app.route('/')
+def home():
+    return {
+        'heath check': 'pass'
+    }
+
+
 @app.route('/translate', methods=['post', 'get'])
 def translate():
     """
@@ -30,11 +38,7 @@ def translate():
         SourceLanguageCode=source_language,
         TargetLanguageCode=destination_language,
     )
-        # print(response)
 
-    # except Exception as e:
-    #     print(e)
-    # response = {}
     return {
         "from": f"{source_language}",
         "to": f"{destination_language}",
@@ -47,4 +51,5 @@ def translate():
     }
 
 
-app.run(port=8888, host='0.0.0.0', debug=True)
+if __name__ == "__main__":
+    app.run(host='0.0.0.0', debug=True)

@@ -122,7 +122,7 @@ string Translate(string text, string &in srcLang, string &in dstLang){
         string msg = HostUrlEncode(text);
         //HostPrintUTF8(q);
         //构建请求的 url 地址
-        string url = "http://192.168.31.182:8888/translate?msg="+msg;
+        string url = "http://192.168.31.182:5000/translate?msg="+msg;
 
         //请求翻译
         string html = HostUrlGetString(url, userAgent);

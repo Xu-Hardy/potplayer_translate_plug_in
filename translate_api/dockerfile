@@ -1,7 +1,7 @@
 FROM python:3.8-slim-buster
-WORKDIR /python-docker
+MAINTAINER Xu <deep.work.max@gmail.com>
+WORKDIR /translate-api
 COPY requirements.txt requirements.txt
-RUN pip3 install -r requirements.txt
+RUN pip config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple && pip install -r requirements.txt
 COPY . .
-COPY .env .env
 CMD ["bash", "deploy.sh"]

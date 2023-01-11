@@ -1,5 +1,7 @@
 # potplayer_translate_plug_in
 
+本文参考大佬的百度插件进行二次开发：https://github.com/fjqingyou/PotPlayer_Subtitle_Translate_Baidu
+
 PotPlayer 字幕在线翻译插件- 基于aws transcribe翻译的potplayer实时字幕
 
 声明：本程序不提供任何aws的凭证，也不会采集任何凭证，源码均已开放

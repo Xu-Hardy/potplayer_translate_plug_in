@@ -10,8 +10,9 @@ app = Flask(__name__)
 
 # read ak/sk from env
 ak, sk = os.environ.get('aws_access_key_id'), os.environ.get('aws_secret_access_key')
-client=None
 region = os.environ.get('region', 'us-east-1')
+client=client = boto3.client('translate', region_name=region, aws_access_key_id=ak, aws_secret_access_key=sk)
+
 logger = logging.getLogger()
 # boto3.set_stream_logger('', level=logging.DEBUG)
 
@@ -39,7 +40,7 @@ def translate():
     sk = data.get('sk', 'this a test message')
     global client
     if client is None:
-        client = boto3.client('translate', region_name=region, aws_access_key_id=ak, aws_secret_access_key=sk)
+        client = boto3.client('translate', region_name=region, aws_access_key_id=ak, aws_secret_access_key=sk) if ak is not None and sk is not None else None
 
     response = client.translate_text(
         Text=message,

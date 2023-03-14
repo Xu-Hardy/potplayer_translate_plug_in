@@ -56,14 +56,14 @@ string GetLoginDesc(){
 * 获取登录时，用户输入框的标签名称
 */
 string GetUserText(){
-    return "ak:";
+    return "请输入accesskey:";
 }
 
 /**
 * 获取登录时，密码输入框的标签名称
 */
 string GetPasswordText(){
-    return "sk:";
+    return "请输入secretkey:";
 }
 
 
@@ -83,23 +83,24 @@ array<string> GetSrcLangs(){
 array<string> GetDstLangs(){
     return GetLangTable();
 }
-
+string appId;
+string toKen;
 /**
 * 登录账号入口
 *
-// *  这里不做校验了，只要有输入就判定为成功。具体测试由用户的翻译测试按钮去测试
-// * @param appIdStr appid 字符串
-// * @param toKenStr 秘钥字符串
+*  这里不做校验了，只要有输入就判定为成功。具体测试由用户的翻译测试按钮去测试
+* @param appIdStr appid 字符串
+* @param toKenStr 秘钥字符串
 */
-// string ServerLogin(string appIdStr, string toKenStr){
-//     //空字符串校验
-//     if(appIdStr.empty() || toKenStr.empty()) return "fail";
+string ServerLogin(string appIdStr, string toKenStr){
+ //空字符串校验
+    if(appIdStr.empty() || toKenStr.empty()) return "fail";
 
-//     //记录到全局变量中
-//     appId = appIdStr;
-//     toKen = toKenStr;
-//     return "200 ok";
-// }
+    //记录到全局变量中
+     appId = appIdStr;
+     toKen = toKenStr;
+     return "200 ok";
+ }
 
 
 /**
@@ -122,7 +123,7 @@ string Translate(string text, string &in srcLang, string &in dstLang){
         string msg = HostUrlEncode(text);
         //HostPrintUTF8(q);
         //构建请求的 url 地址
-        string url = "http://192.168.31.182:5000/translate?msg="+msg;
+        string url = "http://localhost:5000/translate?"+"ak="+appId+"&sk="+toKen+"&msg="+msg;
 
         //请求翻译
         string html = HostUrlGetString(url, userAgent);

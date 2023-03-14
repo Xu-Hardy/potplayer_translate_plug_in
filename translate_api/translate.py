@@ -2,19 +2,18 @@ import logging
 import os
 import boto3
 from flask import Flask, request
-from dotenv import load_dotenv
+# from dotenv import load_dotenv
 
-load_dotenv()
+# load_dotenv()
 
 app = Flask(__name__)
 
 # read ak/sk from env
 ak, sk = os.environ.get('aws_access_key_id'), os.environ.get('aws_secret_access_key')
-
+client=None
 region = os.environ.get('region', 'us-east-1')
-client = boto3.client('translate', region_name=region, aws_access_key_id=ak, aws_secret_access_key=sk)
 logger = logging.getLogger()
-boto3.set_stream_logger('', level=logging.DEBUG)
+# boto3.set_stream_logger('', level=logging.DEBUG)
 
 
 @app.route('/')
@@ -36,6 +35,11 @@ def translate():
     # and source_language and destination_language, for default, source_language = 'en', destination_language = 'zh'
     source_language, destination_language = data.get('src', 'en'), data.get('dst', 'zh')
     message = data.get('msg', 'this a test message')
+    ak = data.get('ak', 'this a test message')
+    sk = data.get('sk', 'this a test message')
+    global client
+    if client is None:
+        client = boto3.client('translate', region_name=region, aws_access_key_id=ak, aws_secret_access_key=sk)
 
     response = client.translate_text(
         Text=message,

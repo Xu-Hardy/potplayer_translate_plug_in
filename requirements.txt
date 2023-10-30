@@ -1,5 +1,0 @@
-boto3~=1.26.45
-setuptools~=65.5.0
-botocore~=1.29.45
-flask~=2.2.2
-python-dotenv~=0.21.0

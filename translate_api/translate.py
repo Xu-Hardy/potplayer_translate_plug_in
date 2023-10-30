@@ -2,8 +2,10 @@ import logging
 import os
 import boto3
 from flask import Flask, request, jsonify
+from flask_cors import CORS
 
 app = Flask(__name__)
+CORS(app)  # 这将为您的整个应用启用CORS
 
 # Set default from environment variables
 default_ak = os.environ.get('aws_access_key_id')
@@ -14,31 +16,23 @@ client = boto3.client('translate', region_name=region, aws_access_key_id=default
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
+
 @app.route('/')
 def home():
     return {
         'health check': 'pass'
     }
 
+
 @app.route('/translate', methods=['POST', 'GET'])
 def translate():
     try:
-        data = request.args
-
-        # Use provided ak/sk or fallback to environment variable
-        ak = data.get('ak', default_ak)
-        sk = data.get('sk', default_sk)
-
-        # If both are still None, return an error
-        if not ak or not sk:
-            return jsonify(error="Missing AWS credentials"), 400
+        data = request.json
+        print(data)
 
         source_language = data.get('src', 'en')
         destination_language = data.get('dst', 'zh')
         message = data.get('msg', 'this a test message')
-
-        global client
-        client = boto3.client('translate', region_name=region, aws_access_key_id=ak, aws_secret_access_key=sk)
 
         response = client.translate_text(
             Text=message,
@@ -61,5 +55,41 @@ def translate():
         logger.error(f"Error translating text: {e}")
         return jsonify(error=str(e)), 500
 
+
+@app.route('/pt', methods=['post', 'get'])
+def translate_pt():
+    """
+    require: msg
+    :return:
+    """
+    # try:
+    data = request.args
+    # get aws ak and sk
+    # and source_language and destination_language, for default, source_language = 'en', destination_language = 'zh'
+    source_language, destination_language = data.get('src', 'en'), data.get('dst', 'zh')
+    message = data.get('msg', 'this a test message')
+    # ak = data.get('ak', 'this a test message') sk = data.get('sk', 'this a test message') global client if client
+    # is None: client = boto3.client('translate', region_name=region, aws_access_key_id=ak, aws_secret_access_key=sk)
+    # if ak is not None and sk is not None else None
+
+    response = client.translate_text(
+        Text=message,
+        SourceLanguageCode=source_language,
+        TargetLanguageCode=destination_language,
+    )
+    print(response)
+
+    return {
+        "from": f"{source_language}",
+        "to": f"{destination_language}",
+        "trans_result": [
+            {
+                "src": message,
+                "dst": response.get('TranslatedText', "no message pls check script")
+            }
+        ]
+    }
+
+
 if __name__ == "__main__":
-    app.run(host='0.0.0.0', debug=True, port=10000)
+    app.run(host='0.0.0.0', debug=True, port=50000)

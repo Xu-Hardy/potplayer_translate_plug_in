@@ -5,5 +5,5 @@ services:
       - .env
     build: .
     ports:
-      - "5000:5000"
+      - "50000:50000"
     container_name: api

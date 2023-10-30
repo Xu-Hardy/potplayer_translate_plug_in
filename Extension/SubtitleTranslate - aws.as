@@ -48,7 +48,7 @@ string GetLoginTitle(){
 * 获取登录的描述信息
 */
 string GetLoginDesc(){
-    return "请输入你的ak/sk,注意最小权限原则";
+    return "请输入你的翻译API信息";
 }
 
 
@@ -56,14 +56,14 @@ string GetLoginDesc(){
 * 获取登录时，用户输入框的标签名称
 */
 string GetUserText(){
-    return "请输入accesskey:";
+    return "API endpoint:";
 }
 
 /**
 * 获取登录时，密码输入框的标签名称
 */
 string GetPasswordText(){
-    return "请输入secretkey:";
+    return "apikey:";
 }
 
 
@@ -72,7 +72,7 @@ string GetPasswordText(){
 */
 array<string> GetSrcLangs(){
     array<string> ret = GetLangTable();
-    
+
     ret.insertAt(0, ""); // empty is auto
     return ret;
 }
@@ -114,7 +114,7 @@ string Translate(string text, string &in srcLang, string &in dstLang){
     if(!text.empty()){//确实有内容需要翻译才有必要继续
         //开发文档。需要App id 等信息
         HostOpenConsole();    // for debug
-        
+
         //语言选择
         srcLang = GetLang(srcLang);
         dstLang = GetLang(dstLang);
@@ -123,7 +123,7 @@ string Translate(string text, string &in srcLang, string &in dstLang){
         string msg = HostUrlEncode(text);
         //HostPrintUTF8(q);
         //构建请求的 url 地址
-        string url = "http://localhost:5000/translate?"+"ak="+appId+"&sk="+toKen+"&msg="+msg;
+        string url = appId+"?msg="+msg;
 
         //请求翻译
         string html = HostUrlGetString(url, userAgent);

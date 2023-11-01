@@ -46,6 +46,7 @@ We aim to expand the range of supported languages and refine the integration for
 ## 语言支持
 
 2022/11/22 支持英文翻译成中文
+2023/10/30 支持输入api地址和apikey
 
 
 最后：

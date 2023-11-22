@@ -42,6 +42,10 @@ python translate.py
 
 ![](https://raw.githubusercontent.com/Xu-Hardy/image-host/master/20231122142415.png)
 
+6. 翻译效果
+
+![](https://raw.githubusercontent.com/Xu-Hardy/image-host/master/20231122143930.png)
+
 声明：本程序不提供任何aws的凭证，也不会采集任何凭证，源码均已开放
 
 ## 基于aws翻译的potplayer实时字幕

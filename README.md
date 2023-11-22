@@ -44,6 +44,17 @@ python translate.py
 
 6. 翻译效果
 
+执行如下指令查看翻译是否可用：
+```
+curl --location 'http://localhost:50000/pt?msg=hello' \
+--header 'Content-Type: application/json' \
+--data '{
+    "msg": "您好",
+    "src": "zh",
+    "dst": "en"
+}'
+```
+
 ![](https://raw.githubusercontent.com/Xu-Hardy/image-host/master/20231122143930.png)
 
 声明：本程序不提供任何aws的凭证，也不会采集任何凭证，源码均已开放

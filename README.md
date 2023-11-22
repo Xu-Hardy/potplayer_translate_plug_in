@@ -38,7 +38,7 @@ python translate.py
 
 ![](https://raw.githubusercontent.com/Xu-Hardy/image-host/master/20231122141908.png)
 
-填写刚刚运行的python脚本的地址，http://yourip:50000/pt，apiley随意。
+填写刚刚运行的python脚本的地址，http://yourip:50000/pt，  apiley随意。
 
 ![](https://raw.githubusercontent.com/Xu-Hardy/image-host/master/20231122142415.png)
 

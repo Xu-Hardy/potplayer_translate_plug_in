@@ -4,6 +4,44 @@
 
 PotPlayer 字幕在线翻译插件- 基于aws transcribe翻译的potplayer实时字幕
 
+
+
+## 安装说明
+
+1. 安装potplayer，官网是https://potplayer.daum.net/
+2. 下载项目脚本，git clone git@github.com:Xu-Hardy/potplayer_translate_plug_in.git
+3. 安装Python和依赖，这里推荐[miniconda](https://docs.conda.io/projects/miniconda/en/latest/index.html)和[pip清华源](https://mirrors.tuna.tsinghua.edu.cn/help/pypi/) 
+
+```bash
+pip config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple
+```
+
+4. 运行翻译后端,进入translate_api目录，然后执行：
+
+```bash
+pip install -r requirements.txt
+```
+
+然后把AWS 海外区的ak/sk写到.env中，格式参考temp.env
+
+```
+python translate.py
+```
+
+然后浏览器打开http://localhost:50000来查看服务是否正常运行
+
+5. 安装播放器脚本，把Extension目录下的`1SubtitleTranslate - aws.as`和`SubtitleTranslate - aws.ico`放到`C:\Program Files\DAUM\PotPlayer\Extension\Subtitle\Translate`这个目录，如果你的默认路径不是这个，那么按照如图所示
+
+![](https://raw.githubusercontent.com/Xu-Hardy/image-host/master/20231122141837.png)
+
+这里打开文件夹可以看到你的potplayer插件目录，然后点击账户设置。
+
+![](https://raw.githubusercontent.com/Xu-Hardy/image-host/master/20231122141908.png)
+
+填写刚刚运行的python脚本的地址，http://yourip:50000/pt，apiley随意。
+
+![](https://raw.githubusercontent.com/Xu-Hardy/image-host/master/20231122142415.png)
+
 声明：本程序不提供任何aws的凭证，也不会采集任何凭证，源码均已开放
 
 ## 基于aws翻译的potplayer实时字幕

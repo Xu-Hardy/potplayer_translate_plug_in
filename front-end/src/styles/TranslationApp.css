@@ -1,0 +1,99 @@
+.translation-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 50px;
+    font-family: Arial, sans-serif;
+}
+
+.translation-title {
+    font-size: 28px;
+    font-weight: bold;
+    margin-bottom: 30px;
+    color: #333;
+}
+
+.translation-app {
+    display: flex;
+    gap: 40px;
+    width: 80%;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.input-container, .output-container {
+    flex: 1;
+    padding: 30px;
+    background-color: #f5f5f5;
+}
+
+h2 {
+    font-size: 20px;
+    margin-bottom: 20px;
+    color: #555;
+}
+
+textarea {
+    width: 100%;
+    height: 200px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 10px;
+    font-size: 16px;
+    transition: height 0.3s ease;
+    resize: vertical;
+}
+
+.translation-output {
+    background-color: white;
+    white-space: pre-line;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 10px;
+    min-height: 200px;
+    font-size: 16px;
+    color: #444;
+    text-align: left; /* Added this line to ensure text is left-aligned */
+}
+
+/* Utility class to determine the size of textarea */
+.auto-expand {
+    height: auto;
+}
+
+textarea {
+    /* 其他样式保持不变 */
+    min-height: 200px;
+    overflow-y: auto;   /* 当内容超出最大高度时，会出现滚动条 */
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 10px;
+    font-size: 16px;
+}
+
+/* 在 TranslationApp.css 中添加 */
+
+.toggle-button {
+    background-color: #007BFF;  /* 蓝色背景 */
+    color: white;              /* 文字颜色为白色 */
+    padding: 10px 20px;       /* 内部填充 */
+    border: none;              /* 无边框 */
+    border-radius: 5px;       /* 圆角边框 */
+    cursor: pointer;          /* 当鼠标悬停时为手形图标 */
+    font-size: 16px;          /* 字体大小 */
+    transition: background-color 0.3s;  /* 背景颜色过渡效果 */
+}
+
+.toggle-button:hover {
+    background-color: #0056b3;  /* 当鼠标悬停时的背景颜色 */
+}
+
+.toggle-button:active {
+    background-color: #004299;  /* 按钮被按下时的背景颜色 */
+}
+
+.toggle-button:focus {
+    outline: none;               /* 去除焦点时的轮廓 */
+}
+

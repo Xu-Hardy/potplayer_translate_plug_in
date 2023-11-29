@@ -22,7 +22,6 @@ pip config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple
 pip install -r requirements.txt
 ```
 
-然后把AWS 海外区的ak/sk写到.env中，格式参考temp.env
 
 ```
 python translate.py

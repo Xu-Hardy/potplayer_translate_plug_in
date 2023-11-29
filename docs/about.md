@@ -14,11 +14,11 @@ http://www.angelcode.com/angelscript/documentation.html
 
 
 
-![img.png](../images/img.png)
+![img.png](./images/img.png)
 
 
 翻译效果图
-![img_1.png](../images/img_1.png)
+![img_1.png](./images/img_1.png)
 
 
-![img_2.png](../images/img_2.png)
+![img_2.png](./images/img_2.png)

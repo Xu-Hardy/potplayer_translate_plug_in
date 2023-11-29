@@ -1,13 +1,12 @@
-# 第一阶段：构建 React 应用
 FROM node:latest as build-stage
 WORKDIR /app
-COPY package*.json ./
+COPY front-end/package*.json /app
 RUN npm install
-COPY . .
+COPY front-end .
 RUN npm run build
 
 
-FROM python:3.12-slim-buster
+FROM python:3.12.0-alpine3.18
 WORKDIR /translate-app
 COPY --from=build-stage /app/build /translate-app/front-end/build
 COPY requirements.txt requirements.txt

@@ -1,5 +1,5 @@
 const config = {
-    apiUrl: "http://your-api-url.com"
+    apiUrl: "http://localhost:50000/translate"
   };
   
   export default config;

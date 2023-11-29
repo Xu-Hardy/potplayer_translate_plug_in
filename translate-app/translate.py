@@ -1,10 +1,10 @@
 import logging
 import os
 import boto3
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, send_from_directory
 from flask_cors import CORS
 
-app = Flask(__name__)
+app = Flask(__name__, static_folder='front-end/build/static', template_folder='front-end/build')
 CORS(app)  # 这将为您的整个应用启用CORS
 
 # Set default from environment variables
@@ -18,6 +18,18 @@ logger = logging.getLogger(__name__)
 
 
 @app.route('/')
+def web_ui():
+    return send_from_directory(app.template_folder, 'index.html')
+
+@app.route('/<path:path>')
+def any_route(path):
+    # 如果路径对应静态文件，则返回它
+    if os.path.exists(os.path.join(app.static_folder, path)):
+        return send_from_directory(app.static_folder, path)
+    # 否则，返回 index.html 并让 React Router 处理路由
+    return send_from_directory(app.template_folder, 'index.html')
+
+@app.route('/status')
 def home():
     return {
         'health check': 'pass'

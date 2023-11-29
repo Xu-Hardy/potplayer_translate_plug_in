@@ -1,7 +1,0 @@
-FROM python:3.12-slim-buster
-MAINTAINER Xu <deep.work.max@gmail.com>
-WORKDIR /translate-api
-COPY requirements.txt requirements.txt
-RUN pip config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple && pip install -r requirements.txt
-COPY . .
-CMD ["bash", "deploy.sh"]

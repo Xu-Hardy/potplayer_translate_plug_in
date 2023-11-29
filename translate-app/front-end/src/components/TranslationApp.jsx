@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import '../styles/TranslationApp.css';
-import config from '../../config/config';
+import config from '../config/config';
 
 function TranslationApp() {
     const [input, setInput] = useState('');

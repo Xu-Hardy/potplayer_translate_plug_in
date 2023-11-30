@@ -1,6 +1,6 @@
 const config = {
-    apiUrl: "http://localhost:50000/translate"
-  };
+    apiUrl: process.env.REACT_APP_ENV
+};
   
-  export default config;
+export default config;
   

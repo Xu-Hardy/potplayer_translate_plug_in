@@ -38,6 +38,7 @@ function TranslationApp() {
                 src = 'zh';
                 dst = 'en'
             }
+            
             const response = await axios.post(config.apiUrl, {
                 msg: text,
                 src: src,

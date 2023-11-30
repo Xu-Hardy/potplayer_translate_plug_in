@@ -12,4 +12,4 @@ COPY --from=build-stage /app/build /translate-app/front-end/build
 COPY requirements.txt requirements.txt
 RUN pip config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple && pip install -r requirements.txt
 COPY . .
-CMD ["bash", "deploy.sh"]
+CMD ["sh", "deploy.sh"]
